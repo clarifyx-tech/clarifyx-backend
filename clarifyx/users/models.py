@@ -47,12 +47,12 @@ class UserLoginAttempt(models.Model):
         verbose_name_plural = _("User Login Attempts")
 
     @property
-    def can_attempt_login(self) -> bool:
+    def can_send_otp(self) -> bool:
         """
         Check if the user can attempt to log in.
         """
         now = timezone.now()
-        if self.send_otp_attempts > self.SEND_OTP_LIMIT and now - self.send_otp_last_attempt > self.SEND_OTP_WAIT_TIME:
-            return False
+        has_reached_wait_time = now - self.send_otp_last_attempt > self.SEND_OTP_WAIT_TIME
 
-        return True
+        # noinspection PyTypeChecker
+        return not (self.send_otp_attempts > self.SEND_OTP_LIMIT and not has_reached_wait_time)
