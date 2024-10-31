@@ -354,3 +354,11 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+# msg91
+# -------------------------------------------------------------------------------
+SEND_OTP_ENABLED = False
+
+if SEND_OTP_ENABLED:
+    MSG91_AUTHKEY = env("MSG91_AUTHKEY")
+    MSG91_TEMPLATE_ID = env("MSG91_TEMPLATE_ID", default="1")

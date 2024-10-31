@@ -8,7 +8,7 @@ from django_extensions.db.models import TimeStampedModel
 
 class User(AbstractUser):
     """
-    Default custom user model for ClarifyX.
+    Default custom user model.
     """
 
     # First and last name do not cover name patterns around the globe
@@ -33,6 +33,10 @@ class User(AbstractUser):
 
 
 class UserProfile(TimeStampedModel):
+    """
+    User profile model for storing user attributes.
+    """
+
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -51,4 +55,3 @@ class UserProfile(TimeStampedModel):
 
     def __str__(self):
         return self.user.username
-
