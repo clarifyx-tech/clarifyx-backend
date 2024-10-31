@@ -30,6 +30,22 @@ class OTPManager:
         response = post(uri, data=json.dumps(params), headers=headers)
         self.validate(status_code=response.status_code, response_json=response.json())
 
+    def verify_otp(self, country_code: str, mobile_number: str, otp: str):
+        if not settings.SEND_OTP_ENABLED:
+            return
+
+        uri = f"{self.base_uri}/api/v5/otp/verify"
+        params = {
+            "mobile": self.get_mobile(country_code=country_code, mobile_number=mobile_number),
+            "otp": otp,
+        }
+        headers = {
+            "authkey": settings.MSG91_AUTHKEY
+        }
+
+        response = post(uri, data=json.dumps(params), headers=headers)
+        self.validate(status_code=response.status_code, response_json=response.json())
+
     @staticmethod
     def get_mobile(country_code: str, mobile_number: str) -> str:
         return f"{country_code}{mobile_number}"
