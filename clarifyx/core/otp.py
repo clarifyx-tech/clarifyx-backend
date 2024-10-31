@@ -17,7 +17,7 @@ class OTPManager:
         params = {
             "otp_expiry": "5",
             "template_id": settings.MSG91_TEMPLATE_ID,  # TODO: get from msg91 panel and update it.
-            "mobile": f"{country_code}{mobile_number}",
+            "mobile": self.get_mobile(country_code=country_code, mobile_number=mobile_number),
             "authkey": settings.MSG91_AUTHKEY,
             "realTimeResponse": "1",
             "invisible": "1",
@@ -28,11 +28,17 @@ class OTPManager:
         }
 
         response = post(uri, data=json.dumps(params), headers=headers)
-        data = response.json()
+        self.validate(status_code=response.status_code, response_json=response.json())
 
-        if response.status_code != 200 or (response.status_code == 200 and data.get("type") == "error"):
+    @staticmethod
+    def get_mobile(country_code: str, mobile_number: str) -> str:
+        return f"{country_code}{mobile_number}"
+
+    @staticmethod
+    def validate(status_code: int, response_json: dict):
+        if status_code != 200 or (status_code == 200 and response_json.get("type") == "error"):
             raise ValidationError(
                 detail={
-                    "non_field_errors": [response.json().get("message")]
+                    "non_field_errors": [response_json.get("message")]
                 }
             )
