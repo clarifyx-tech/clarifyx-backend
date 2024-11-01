@@ -12,8 +12,6 @@ from drf_spectacular.views import SpectacularSwaggerView
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path("users/", include("clarifyx.users.urls", namespace="users")),
     # Your stuff: custom urls includes go here
     # ...
     # Media files

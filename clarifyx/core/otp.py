@@ -11,7 +11,7 @@ class OTPManager:
 
     base_uri = "https://control.msg91.com"
 
-    def __init__(self, country_code: str, mobile_number: str):
+    def __init__(self, mobile_number: str, country_code: str = User.DEFAULT_COUNTRY_CODE):
         self.mobile_number = f"{country_code}{mobile_number}"
 
     def send_otp(self):
@@ -35,7 +35,7 @@ class OTPManager:
         response = post(uri, data=json.dumps(params), headers=headers)
         self.validate(status_code=response.status_code, response_json=response.json())
 
-    def verify_otp(self, otp: int):
+    def verify_otp(self, otp: str):
         if not settings.SEND_OTP_ENABLED:
             return
 
