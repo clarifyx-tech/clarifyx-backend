@@ -4,6 +4,8 @@ from requests import post, get
 from django.conf import settings
 from rest_framework.exceptions import ValidationError
 
+from clarifyx.user_authn.models import User
+
 
 class OTPManager:
 
@@ -24,7 +26,7 @@ class OTPManager:
             "authkey": settings.MSG91_AUTHKEY,
             "realTimeResponse": "1",
             "invisible": "1",
-            "otp_length": "4",
+            "otp_length": str(User.OTP_LENGTH),
         }
         headers = {
             "Content-Type": "application/json"

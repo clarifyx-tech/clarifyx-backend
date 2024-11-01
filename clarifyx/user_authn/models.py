@@ -16,8 +16,10 @@ class User(AbstractUser):
     first_name = None  # type: ignore[assignment]
     last_name = None  # type: ignore[assignment]
 
-    country_code = CharField(_("Country Code"), max_length=5, default="+91")
+    country_code = CharField(_("Country Code"), max_length=5, default="91")
     mobile_number = CharField(_("Mobile Number"), blank=True, null=True, max_length=10)
+
+    OTP_LENGTH = 4
 
     def save(self, *args, **kwargs):
         if not self.username:
