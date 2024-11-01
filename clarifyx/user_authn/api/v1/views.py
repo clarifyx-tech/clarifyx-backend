@@ -79,7 +79,7 @@ class ResendOTPView(OTPViewBase):
         }
 
 
-class VerifyOTPView(APIView):
+class VerifyOTPView(OTPViewBase):
     """
     **Description**
         Verifies a one-time password to a user's mobile number.
@@ -98,16 +98,15 @@ class VerifyOTPView(APIView):
         * 400 Bad Request: OTP doesn't match.
     """
 
-    permission_classes = (AllowAny,)
     serializer_class = VerifyOTPSerializer
-    http_method_names = ["post"]
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    def get_response_body(self, serializer):
+        keys_to_remove = ["mobile_number", "otp"]
 
-        mobile_number = serializer.data['mobile_number']
-        otp = serializer.data['otp']
+        for key in keys_to_remove:
+            serializer.validated_data.pop(key, None)  # No error if key doesn't exist
 
-        otp_manager = OTPManager(mobile_number=mobile_number)
-        otp_manager.verify_otp(otp=otp)
+        return serializer.validated_data
+
+    def get_status_code(self):
+        return status.HTTP_200_OK
