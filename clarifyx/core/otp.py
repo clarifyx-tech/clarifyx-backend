@@ -49,7 +49,7 @@ class OTPManager:
         response = get(uri, data=json.dumps(params), headers=headers)
         self.validate(status_code=response.status_code, response_json=response.json())
 
-    def resend_otp(self, country_code: str, mobile_number: str):
+    def resend_otp(self):
         if not settings.SEND_OTP_ENABLED:
             return
 
