@@ -49,6 +49,18 @@ class OTPManager:
         response = get(uri, data=json.dumps(params), headers=headers)
         self.validate(status_code=response.status_code, response_json=response.json())
 
+    def resend_otp(self, country_code: str, mobile_number: str):
+        if not settings.SEND_OTP_ENABLED:
+            return
+
+        uri = f"{self.base_uri}/api/v5/otp/retry"
+        params = {
+            "mobile": self.mobile_number,
+            "retrytype": "Voice",
+            "authkey": settings.MSG91_AUTHKEY
+        }
+        response = get(uri, data=json.dumps(params))
+        self.validate(status_code=response.status_code, response_json=response.json())
 
     @staticmethod
     def validate(status_code: int, response_json: dict):
